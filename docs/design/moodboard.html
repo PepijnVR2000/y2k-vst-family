@@ -1,0 +1,251 @@
+<title>System Browser Moodboard</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=VT323&display=swap">
+<style>
+/* Layout: de pagina zelf staat in de "Browser"-ruimte (warmgrijze PS2-gradiënt); referenties zweven zonder kaders, gegroepeerd per rol. Bewust één thema. */
+:root{
+  --room-hi:#8f9590; --room-mid:#5e625a; --room-lo:#272922;
+  --text:#eef0ea; --title:#e4f17c; --sel:#72c7d7; --muted:#c3c8bf;
+  --vfd-bg:#1a2c3a; --vfd:#f2fdfb; --vfd-off:#2e445b; --amber:#cbab36;
+  --f-ui:"M PLUS Rounded 1c","Nunito","Segoe UI",system-ui,sans-serif;
+  --f-vfd:"VT323",ui-monospace,monospace;
+  --shadow:0 1px 2px rgba(0,0,0,.5);
+  color-scheme:dark;
+}
+html{background:var(--room-lo)}
+body{background:radial-gradient(90% 70% at 50% 18%,var(--room-hi) 0%,var(--room-mid) 45%,var(--room-lo) 100%) fixed,var(--room-lo);color:var(--text);font-family:var(--f-ui);font-size:16px;line-height:1.6}
+.wrap{max-width:1180px;margin:0 auto;padding-block:40px 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:64px}
+h1,h2,h3{font-weight:500;margin:0;text-shadow:var(--shadow);text-wrap:balance}
+h1{font-size:clamp(30px,5vw,52px);line-height:1.1}
+h2{font-size:clamp(22px,3vw,30px);color:var(--title)}
+h3{font-size:18px}
+p{margin:0;max-width:70ch;text-shadow:var(--shadow)}
+a{color:var(--sel)}
+a:focus-visible{outline:2px solid var(--sel);outline-offset:3px}
+.head{display:grid;gap:14px}
+.ctx{color:var(--title);font-size:18px;text-shadow:var(--shadow)}
+.vfd{font-family:var(--f-vfd);font-size:22px;line-height:1.15;color:var(--vfd);background:var(--vfd-bg);padding:8px 14px;border-radius:3px;box-shadow:inset 0 0 0 1px #0d1820,0 2px 6px rgba(0,0,0,.35);text-shadow:0 0 6px rgba(160,255,250,.55);max-width:100%;overflow-x:auto;white-space:nowrap}
+.vfd b{font-weight:400;color:var(--vfd-off);text-shadow:none}
+
+/* correcties */
+.fix{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px 32px}
+.fix div{display:grid;gap:2px}
+.fix .was{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(255,255,255,.35);font-size:15px}
+.fix .is{color:var(--text)}
+
+/* groepen en figuren */
+.group{display:grid;gap:22px}
+.group>p{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:36px 28px}
+.grid.big{grid-template-columns:repeat(auto-fill,minmax(480px,1fr))}
+@media (max-width:540px){.grid,.grid.big{grid-template-columns:1fr}}
+figure{margin:0;display:grid;gap:10px;min-width:0}
+figure img{width:100%;height:auto;display:block;border-radius:2px;box-shadow:0 14px 28px -10px rgba(0,0,0,.6),0 2px 4px rgba(0,0,0,.35)}
+figcaption{display:grid;gap:6px}
+.what{font-size:13px;color:var(--title);text-shadow:var(--shadow)}
+.see{font-size:15px;color:var(--muted)}
+.take{font-size:15px}
+.take::before{content:"Nemen: ";color:var(--sel)}
+.anti .take::before{content:"Daarom: ";color:#ff9a8a}
+.sw{display:flex;gap:4px;height:14px}
+.sw i{display:block;height:100%;border-radius:1px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
+
+/* richtlijnen */
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:26px 36px}
+.rule{display:grid;gap:8px;align-content:start}
+.rule ul{margin:0;padding-left:1.1em;display:grid;gap:4px;color:var(--muted);font-size:15px}
+.rule ul strong{color:var(--text);font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{display:grid;gap:4px;font-size:12px;color:var(--muted);min-width:84px}
+.chip i{height:34px;border-radius:2px;box-shadow:0 4px 10px -4px rgba(0,0,0,.6)}
+.discs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.disc{display:grid;gap:8px}
+.disc .grad{height:44px;display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+.disc .grad i{border-radius:3px;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 6px 10px -5px rgba(0,0,0,.6)}
+.disc .grad i:last-child{box-shadow:0 0 18px 4px rgba(255,255,255,.55),inset 0 1px 0 rgba(255,255,255,.6)}
+.note{font-size:14px;color:var(--muted);max-width:90ch}
+</style>
+
+<div class="wrap">
+
+<header class="head">
+  <div class="ctx">Beeldonderzoek · 22 november 2026</div>
+  <h1>System Browser</h1>
+  <p>Elke plugin is een ruimte in het systeemmenu van een console uit 2001 die nooit heeft bestaan. Geen apparaat met een behuizing, maar de software van de console zelf: zwevende objecten in een lichte ruimte, licht onder wat je kiest, groot en vriendelijk lettertype.</p>
+  <p>Hieronder 24 referenties die ik zelf heb bekeken, met kleuren gemeten uit de echte pixels. Onder elke afbeelding staan de zes dominante kleuren, breedte naar aandeel.</p>
+  <div class="vfd">BROWSER  24 REFS  <b>888</b> 48 BEKEKEN  <b>888</b> KLEUREN GEMETEN</div>
+</header>
+
+<section class="group">
+  <h2>Wat het tekstonderzoek fout had</h2>
+  <div class="fix">
+    <div><span class="was">PS2-menu's zijn een donkere navy void</span><span class="is">Violette wolken (klok, instellingen) of lichtgrijs (browser).</span></div>
+    <div><span class="was">Boot-torens zijn doorzichtig kristal</span><span class="is">Matte, korrelige grijs-lila blokken.</span></div>
+    <div><span class="was">Selectie: schaalveer en glans-sweep</span><span class="is">Een witte lichtpoel onder het object, of het wordt groter en verandert van kleur.</span></div>
+    <div><span class="was">Labels in caps, wijd gespatieerd, 9–11 px</span><span class="is">Gewone hoofdletters, normale spatiëring, groot: 3–5% van de schermhoogte.</span></div>
+    <div><span class="was">Chroom en geborsteld aluminium</span><span class="is">Nergens gezien. Wel: glas, mat getextureerde blokken, van binnen verlichte toetsen.</span></div>
+    <div><span class="was">MPC-scherm grijsgroen, sampler-displays amber</span><span class="is">MPC teal-verlicht, SU700 cyaan-wit VFD. Amber alleen bij de GameCube-klok.</span></div>
+    <div><span class="was">Gekleurd randlicht per plugin</span><span class="is">Geen enkele bediening uit die tijd had dat. Licht linksboven, 1 px bevels, diepte via schaduw.</span></div>
+    <div><span class="was">Niemand doet een console-look</span><span class="is">GameVerb heeft al een behuizing in controllervorm. Vrij is nog: het console-besturingssysteem.</span></div>
+  </div>
+</section>
+
+<section class="group" id="rooms">
+  <h2>1 · De ruimtes</h2>
+  <p>De PS2 zelf. Hier komt de basis vandaan: drie ruimtes per plugin.</p>
+  <div class="grid big" data-set="rooms"></div>
+</section>
+
+<section class="group">
+  <h2>2 · Selectie en diepte</h2>
+  <p>Hoe andere consoles uit dezelfde jaren kiezen en diepte maken.</p>
+  <div class="grid" data-set="depth"></div>
+</section>
+
+<section class="group">
+  <h2>3 · Waarden en displays</h2>
+  <p>Precieze getallen stonden in die tijd op kleine verlichte schermen. De sfeer zat in de rest.</p>
+  <div class="grid" data-set="values"></div>
+</section>
+
+<section class="group">
+  <h2>4 · Bediening die je aanraakt</h2>
+  <p>Muziekhardware en -software uit 1999–2000: hoe knoppen en stappen gebouwd waren.</p>
+  <div class="grid" data-set="touch"></div>
+</section>
+
+<section class="group">
+  <h2>5 · Grafische laag en speelsheid</h2>
+  <div class="grid" data-set="graphic"></div>
+</section>
+
+<section class="group">
+  <h2>6 · De onderkant van de Render Engine</h2>
+  <p>Standaard is alles strak PS2. Draai je de graphics helemaal omlaag, dan zakt het beeld naar dit.</p>
+  <div class="grid" data-set="ps1"></div>
+</section>
+
+<section class="group anti">
+  <h2>7 · Wat we níet doen</h2>
+  <p>De drie plugins die het dichtst bij zitten. Ze clusteren allemaal op donker paars en neon, of op een apparaatbehuizing.</p>
+  <div class="grid" data-set="anti"></div>
+</section>
+
+<section class="group">
+  <h2>Richtlijnen</h2>
+  <p>Wat ik uit deze beelden vastleg. De volledige versie staat in de repo als <code>docs/design/GUIDELINES.md</code>.</p>
+  <div class="rules">
+    <div class="rule"><h3>Drie ruimtes per plugin</h3><ul>
+      <li><strong>Browser</strong> (spelen): warmgrijze radiale gradiënt, objecten zweven zonder panelen of kaders.</li>
+      <li><strong>Systeem</strong> (instellingen en Render Engine): violette wolken met glazen prisma's.</li>
+      <li><strong>Memory card</strong> (presets): grijs, 3D-save-iconen die langzaam draaien.</li>
+      <li>Wisselen gaat als een camerabeweging door de ruimte, niet als tabblad.</li>
+    </ul></div>
+    <div class="rule"><h3>Kiezen en status</h3><ul>
+      <li>Geselecteerd: <strong>witte lichtpoel eronder</strong> en iets optillen (GameCube).</li>
+      <li>Nooit omlijningen of highlight-balken.</li>
+      <li>Tekst die actief is wordt groter en cyaan.</li>
+      <li>Actieve stap gloeit van binnenuit.</li>
+    </ul></div>
+    <div class="rule"><h3>Tekst</h3><ul>
+      <li>Afgerond sans, medium gewicht, <strong>gewone hoofdletters</strong>, normale spatiëring.</li>
+      <li>Groot: 18–30 px bij een venster van 600 px hoog.</li>
+      <li>Drie kleuren: gebroken wit (standaard), geelgroen (titels), cyaan (actief). Zachte schaduw van 1–2 px.</li>
+      <li>Nooit effecten over tekst.</li>
+    </ul></div>
+    <div class="rule"><h3>Bediening</h3><ul>
+      <li><strong>Stappen = zwevende kubussen</strong> met nummer, kleurverloop per plugin (PS2 audio-cd).</li>
+      <li><strong>Hoofdknoppen = prisma-ring</strong>: 12 glazen prisma's, waarde vult ze als een meter (PS2-klok).</li>
+      <li>Toggles: van binnen verlichte toetsen (Electribe).</li>
+      <li>Hooguit 1–2 snoepballen per plugin voor speelse acties (Kai's Power Goo).</li>
+    </ul></div>
+    <div class="rule"><h3>Materiaal en licht</h3><ul>
+      <li>Glas, matte korrelige blokken, verlicht doorschijnend plastic. <strong>Geen chroom, geen geborsteld metaal.</strong></li>
+      <li>Eén licht linksboven. Bevels 1 px, maximaal 2 highlightlagen.</li>
+      <li>Diepte via zachte schaduw onder zwevende objecten en bloom op het actieve.</li>
+    </ul></div>
+    <div class="rule"><h3>Waarden</h3><ul>
+      <li>Alle precieze waarden in een <strong>VFD-strook</strong>: cyaan-wit op diep blauw, uitgeschakelde segmenten zichtbaar (SU700).</li>
+      <li>Tempo en tijd in amber dot-matrix (GameCube-klok).</li>
+      <li>Merkteken per plugin: een stapel kleurstrepen (Wip3out).</li>
+    </ul></div>
+  </div>
+
+  <h3>Basiskleuren, gemeten</h3>
+  <div class="chips">
+    <div class="chip"><i style="background:#8f9590"></i>#8f9590 browser licht</div>
+    <div class="chip"><i style="background:#5e625a"></i>#5e625a browser midden</div>
+    <div class="chip"><i style="background:#272922"></i>#272922 browser rand</div>
+    <div class="chip"><i style="background:#312456"></i>#312456 systeem</div>
+    <div class="chip"><i style="background:#090517"></i>#090517 systeem diep</div>
+    <div class="chip"><i style="background:#e4f17c"></i>#e4f17c titel</div>
+    <div class="chip"><i style="background:#72c7d7"></i>#72c7d7 actief</div>
+    <div class="chip"><i style="background:#eef0ea"></i>#eef0ea tekst</div>
+    <div class="chip"><i style="background:#1a2c3a"></i>#1a2c3a VFD</div>
+    <div class="chip"><i style="background:#cbab36"></i>#cbab36 dot-matrix</div>
+  </div>
+
+  <h3>Eén kleurverloop per disc</h3>
+  <div class="discs">
+    <div class="disc"><div class="grad"><i style="background:#3f4eaf"></i><i style="background:#4568a8"></i><i style="background:#4d8a9f"></i><i style="background:#24867c"></i><i style="background:#38c176"></i><i style="background:#62c373"></i><i style="background:#5fe076"></i><i style="background:#68f877"></i></div><p><strong>Disc 1 · mono arp</strong>: blauw naar groen, letterlijk de PS2 audio-cd-kubussen.</p></div>
+    <div class="disc"><div class="grad"><i style="background:#7a4c10"></i><i style="background:#865f14"></i><i style="background:#a48420"></i><i style="background:#cbab36"></i><i style="background:#f2a70d"></i><i style="background:#f9c53a"></i><i style="background:#fdf263"></i><i style="background:#fef579"></i></div><p><strong>Disc 2 · drums</strong>: amber naar Electribe-geel. Warm, speels.</p></div>
+    <div class="disc"><div class="grad"><i style="background:#090517"></i><i style="background:#241b46"></i><i style="background:#312456"></i><i style="background:#3f4287"></i><i style="background:#5865ac"></i><i style="background:#5f8fd0"></i><i style="background:#72c7d7"></i><i style="background:#7cbbf3"></i></div><p><strong>Disc 3 · poly</strong>: violet naar ijsblauw, de prisma's van de klok.</p></div>
+    <div class="disc"><div class="grad"><i style="background:#6a6048"></i><i style="background:#adaa8f"></i><i style="background:#ece3c3"></i><i style="background:#5aab93"></i><i style="background:#48b3a8"></i><i style="background:#6187c7"></i><i style="background:#81a7c8"></i><i style="background:#abbdc6"></i></div><p><strong>Disc 4 · sampler</strong>: MPC-crème en teal naar Dreamcast-lucht.</p></div>
+  </div>
+  <p class="note">De afbeeldingen zijn screenshots en productfoto's van derden, alleen voor intern ontwerpwerk. Deel deze pagina niet publiek.</p>
+</section>
+
+</div>
+
+<script>
+const PAL = {"01-ps2-memcard.jpg": [["#5e625a", 19], ["#434034", 18], ["#272922", 18], ["#4d5045", 17], ["#747972", 17], ["#8f9590", 11]], "02-ps2-cd-cubes.jpg": [["#5f6164", 23], ["#505159", 23], ["#797b7b", 20], ["#667074", 14], ["#989d97", 12], ["#5bab7c", 8]], "03-ps2-clock.jpg": [["#312456", 24], ["#090517", 22], ["#241b46", 19], ["#110d2e", 15], ["#1c1033", 14], ["#444173", 7]], "04-ps2-sysconf.jpg": [["#323e61", 20], ["#090b19", 20], ["#2f2e52", 19], ["#19162c", 18], ["#24203d", 15], ["#477e8e", 8]], "05-ps2-boot.jpg": [["#020204", 27], ["#333754", 20], ["#171a37", 17], ["#5e6688", 15], ["#a6b4d5", 11], ["#0a0a18", 10]], "06-gc-cube.jpg": [["#0a0a0a", 36], ["#373f4d", 33], ["#7e8c8a", 17], ["#1a1c25", 8], ["#090a0b", 4], ["#080708", 2]], "07-gc-memcard.jpg": [["#000000", 50], ["#0b004c", 16], ["#676c77", 14], ["#07031c", 9], ["#171644", 7], ["#00002f", 3]], "08-gc-calendar.jpg": [["#000000", 44], ["#040304", 16], ["#100e0d", 16], ["#654f22", 10], ["#000002", 8], ["#040002", 5]], "09-dc-bios.jpg": [["#81a7c8", 22], ["#6187c7", 19], ["#5862ab", 19], ["#abadb3", 17], ["#7a91b8", 12], ["#abbdc6", 11]], "10-xbox-dash.jpg": [["#062705", 23], ["#031302", 19], ["#021e01", 18], ["#0d3509", 17], ["#061f05", 13], ["#5a8a1c", 10]], "11-wip3out-teams.jpg": [["#6a6158", 54], ["#613e43", 16], ["#8c8676", 11], ["#696158", 10], ["#6b6158", 8], ["#6b6157", 2]], "12-wip3out-options.jpg": [["#1d1f2b", 25], ["#2b2a30", 22], ["#161112", 20], ["#181820", 14], ["#0d0f15", 12], ["#6a6253", 7]], "13-music2000.jpg": [["#243f33", 24], ["#161818", 20], ["#040d12", 20], ["#316042", 15], ["#4c0512", 11], ["#5aab93", 9]], "14-vib-ribbon.jpg": [["#000000", 83], ["#424242", 6], ["#636363", 3], ["#080808", 3], ["#191919", 3], ["#292929", 3]], "15-electribe.jpg": [["#fef579", 28], ["#79888f", 24], ["#fdf263", 23], ["#705f68", 17], ["#b3b086", 5], ["#eceeba", 3]], "16-electribe-panel.jpg": [["#8d8d89", 23], ["#888784", 23], ["#747271", 18], ["#504c4e", 17], ["#817f7c", 13], ["#adafaa", 6]], "17-su700-vfd.jpg": [["#486178", 24], ["#1a2c3a", 20], ["#3a495e", 16], ["#2e445b", 15], ["#83919b", 14], ["#ced2d4", 11]], "18-redrum.jpg": [["#4b5145", 22], ["#2f3632", 21], ["#4e6350", 20], ["#888b83", 13], ["#bbc0be", 13], ["#6e6f66", 12]], "19-mpc2000xl.jpg": [["#ece3c3", 24], ["#8c9478", 19], ["#6a6048", 18], ["#e0d6b5", 15], ["#adaa8f", 13], ["#f1e8cd", 10]], "20-kpt-goo.jpg": [["#214146", 27], ["#02191e", 24], ["#752a3d", 15], ["#95625b", 14], ["#ceb8ab", 12], ["#1d1e24", 9]], "21-ps1-memcard.jpg": [["#000023", 26], ["#3f3784", 18], ["#21195e", 18], ["#0b0335", 17], ["#000019", 10], ["#667c8a", 10]], "22-anti-guyengine.jpg": [["#25223a", 25], ["#0d0d24", 23], ["#2f374d", 18], ["#73737a", 14], ["#d0e4da", 11], ["#6b4a59", 10]], "23-anti-gameverb.jpg": [["#212228", 29], ["#2f5197", 23], ["#abadb8", 20], ["#9e9fa8", 12], ["#b8bece", 8], ["#5376b6", 7]], "24-anti-y2kclub.jpg": [["#3c325f", 19], ["#2d244d", 19], ["#1f202f", 18], ["#111526", 18], ["#8d8e92", 14], ["#595275", 12]]};
+const REFS = {
+ rooms:[
+  ["01-ps2-memcard.jpg","PlayStation 2 · browser, memory card · 2000","Lichte warmgrijze gradiënt. 3D-iconen zweven zonder kader. De geselecteerde save heeft een witte lichtpoel eronder.","Dit wordt de memory-card-ruimte voor presets, bijna letterlijk."],
+  ["02-ps2-cd-cubes.jpg","PlayStation 2 · browser, audio-cd · 2000","Genummerde kubussen in rijen, kleur loopt van paars via blauw naar groen. De spelende track gloeit wit.","Dit ís onze step sequencer: elke stap een kubus, de afspeelpositie gloeit."],
+  ["03-ps2-clock.jpg","PlayStation 2 · hoofdmenu, klok · 2000","Twaalf glazen prisma's in een ring op violette wolken. Het huidige uur is half gevuld, als een meter.","De prisma-ring als hoofdknop: de waarde vult de prisma's."],
+  ["04-ps2-sysconf.jpg","PlayStation 2 · systeemconfiguratie · 2000","Geen balken, geen kaders. De gekozen regel is groter en cyaan, de titel geelgroen, de rest gebroken wit.","De systeem-ruimte voor instellingen en de Render Engine-graphics."],
+  ["05-ps2-boot.jpg","PlayStation 2 · opstarten · 2000","Matte, korrelige grijs-lila blokken die door het beeld schuiven. Niet doorzichtig.","Matte blokken voor grote vormen. Een korte opstart, alleen de eerste keer."]
+ ],
+ depth:[
+  ["06-gc-cube.jpg","Nintendo GameCube · hoofdmenu · 2001","Eén glazen kubus, de menu-opties staan op de vlakken.","Pagina's van een plugin als vlakken van één draaiend object."],
+  ["07-gc-memcard.jpg","Nintendo GameCube · memory card · 2001","De gekozen save komt uit zijn vakje, wordt groter en verandert in ijsblauw glas.","Selectie is optillen en vergroten, nooit omlijnen."],
+  ["09-dc-bios.jpg","Sega Dreamcast · BIOS · 1998","Daglicht: lucht en wolken, dikke speelgoedachtige 3D-iconen, gekleurde pil-labels.","De speelse kant, en de lichte toon voor de sampler."],
+  ["10-xbox-dash.jpg","Microsoft Xbox · dashboard · 2001","Onregelmatig polygoonweb, glanzende groene bol, pilvormige menubalken, techno-letter.","Alleen het web als patroon voor modulatieroutes. De rest is te herkenbaar Xbox."]
+ ],
+ values:[
+  ["08-gc-calendar.jpg","Nintendo GameCube · klok instellen · 2001","Grote amber dot-matrix-cijfers op een zwart raster.","Tempo en tijd in amber dot-matrix."],
+  ["17-su700-vfd.jpg","Yamaha SU700 · sampler · 1998","Cyaan-wit VFD met zichtbare uitgeschakelde segmenten, balkmeters in oranje, wit en blauw.","Alle precieze waarden in zo'n VFD-strook."],
+  ["19-mpc2000xl.jpg","Akai MPC2000XL · 1999","Crème behuizing, teal-verlicht scherm met omgekeerde tabbladen, grijze pads.","Hét jungle-apparaat. Crème en teal voor disc 4."]
+ ],
+ touch:[
+  ["15-electribe.jpg","Korg Electribe EA-1 en ER-1 · 1999","Dezelfde grijze behuizing, één bedrukt kleurvlak per product.","Het familieprincipe: zelfde basis, één kleur per disc."],
+  ["16-electribe-panel.jpg","Korg Electribe EA-1 · paneel","Bevels van 1 px, licht linksboven, toetsen die van binnen gloeien, labels in een schreefletter.","Verlichte toetsen voor toggles. Bevels klein houden."],
+  ["18-redrum.jpg","Reason 1.0 · Redrum · 2000","Tien kanalen naast elkaar, 16 verlichte stapknoppen onderaan, dicht maar geordend.","Hoe stappen en per-kanaal-knoppen leesbaar blijven bij veel informatie."],
+  ["13-music2000.jpg","Music 2000 · PlayStation · 1999","Muziek maken op de console: gekleurde blokken in een raster, tempo in LCD-cijfers.","Patronen als blokken. Bewijs dat console en muziekmaken samen bestonden."]
+ ],
+ graphic:[
+  ["11-wip3out-teams.jpg","Wip3out · teamkeuze · 1999","Vlak taupe, elk team een stapel kleurstrepen, unicase letter.","Elke disc krijgt een strepenset als merkteken."],
+  ["12-wip3out-options.jpg","Wip3out · opties · 1999","De gekozen regel wordt alleen amber. Verder niets.","Eén accentkleur voor selectie in de grafische laag."],
+  ["14-vib-ribbon.jpg","Vib-Ribbon · menu · 1999","Eén witte lijn op zwart, ook de letters.","De scope van de mono arp: de lijn is de golfvorm."],
+  ["20-kpt-goo.jpg","Kai's Power Goo · 1996","Glanzende snoepballen als knoppen rond een beeld dat je vervormt.","Hooguit 1–2 van zulke ballen per plugin, voor speelse acties."]
+ ],
+ ps1:[
+  ["21-ps1-memcard.jpg","PlayStation · memory card (Japan) · 1994","Rafelige regenbooglabels, donkerblauw, kleine pixel-iconen.","Zo ziet een disc eruit met de graphics helemaal omlaag."]
+ ],
+ anti:[
+  ["22-anti-guyengine.jpg","GuyEngine V2 · UltimaDSP","Donker paars, platte boogknoppen, systeemletter. 'PS2' zit alleen in de achtergrond.","Geen donkere navy-paarse basis en geen standaardknoppen."],
+  ["23-anti-gameverb.jpg","GameVerb · Impact Soundworks · 2023","Behuizing in de vorm van een controller, blauw pixelscherm.","Geen apparaat of controller. Wij zijn het besturingssysteem."],
+  ["24-anti-y2kclub.jpg","Y2K Club · Initial Audio","Neon-paars op donker, generieke knoppen, printplaat-achtergrond.","Precies waar alle concurrenten zitten. Wij gaan licht en zwevend."]
+ ]
+};
+for (const el of document.querySelectorAll('[data-set]')) {
+  for (const [img, what, see, take] of REFS[el.dataset.set]) {
+    const f = document.createElement('figure');
+    const pal = (PAL[img] || []).map(([c, s]) => `<i style="background:${c};flex:${Math.max(s,3)}"></i>`).join('');
+    f.innerHTML = `<img src="references/${img}" alt="${what}" loading="lazy"><figcaption><span class="what">${what}</span><div class="sw">${pal}</div><span class="see">${see}</span><span class="take">${take}</span></figcaption>`;
+    el.appendChild(f);
+  }
+}
+</script>

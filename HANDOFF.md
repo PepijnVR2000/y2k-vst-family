@@ -26,9 +26,16 @@ Laatst bijgewerkt: 22 november 2026. Deze sectie is de actuele waarheid; houd he
 - Het project is gestart vanuit een sessie op de G02-repo; dat is een ander,
   ongerelateerd project. Niets van dit project hoort daar.
 
-## Voorlopige richting (nog door de gebruiker te bevestigen)
+## Art direction: System Browser (beeldonderzoek, 22 nov)
 
-**Art direction** (de orchestrator heeft de eindbeslissing over de UI):
+Vastgelegd in `docs/design/GUIDELINES.md`, moodboard in `docs/design/moodboard.html`
+(ook: https://claude.ai/artifact/FVmLbZqHbTq3nEriabxqxm). Gebaseerd op 48 bekeken beelden.
+Plugin = ruimte in het systeemmenu van een verzonnen console: Browser (warmgrijs, spelen),
+Systeem (violette wolken, instellingen + Render Engine), Memory card (presets). Stappen als
+zwevende kubussen, hoofdknoppen als prisma-ring, selectie = lichtpoel, sentence-case tekst,
+waarden in een VFD-strook. **Vervangt** de onderstaande, op tekst gebaseerde eerste richting.
+
+### Verouderd: eerste richting uit tekstonderzoek
 - *Riff Console* als systeem: strakke identiteit van een verzonnen consolemerk uit ~2001,
   eigen lettertype, pictogrammen, productcodes, één accentkleur per plugin,
   voorgerenderde 3D-bediening (geborsteld aluminium, gel, glas), waarden in LCD-stroken.
@@ -55,7 +62,7 @@ drum computer → poly synth → sampler + System Link + Mac.
 
 ## Open beslissingen (gebruiker)
 
-1. Art direction zoals hierboven: akkoord?
+1. Art direction System Browser (moodboard): akkoord?
 2. Render Engine als ruggengraat: akkoord?
 3. Eerste instrument: mono arp (advies) of drum computer?
 4. Naam van merk / verzonnen console ("Lowpoly System" is werktitel).

@@ -12,8 +12,9 @@ als je werk wanneer de stand verandert.
 
 ## Harde UI-regels
 
-- Eén lichtopstelling en één materiaalbibliotheek voor de hele familie. Chroom max ~2% van het beeld.
-- Nooit post-effecten (bloom, dither, scanlines, CRT) over tekst. Waarden scherp in LCD-stroken.
+- Volg `docs/design/GUIDELINES.md` (System Browser). Die gaat voor op `docs/research/01-ui-aesthetic.md`.
+- Eén licht (linksboven) en één materiaalbibliotheek voor de hele familie. Geen chroom, geen geborsteld metaal.
+- Nooit post-effecten (bloom, dither, scanlines, CRT) over tekst. Waarden scherp in de VFD-strook.
 - Standaardlook is strak PS2; PS1-artefacten alleen via de Render Engine-settings.
 - Warme accenten tegen "liminal horror"-drift.
 - Verzin de console: geen Sony/Xbox/Nintendo-merken, geen △○×□-glyphs, geen nep-Japans
