@@ -8,9 +8,9 @@ breakbeat / drum & bass sound.
 
 ## Status
 
-**Fase 1 (onderzoek) is afgerond. Fase 0 (skelet + CI) staat op branch
-`claude/skeleton-ci`:** CMake + JUCE 9 + CLAP, een eerste instrument-shell
-(`lp_disc1`, nog zonder echte UI) en tests. Namen zijn codenamen ("LP", "LP Disc 1 (dev)").
+**Onderzoek, beeldonderzoek, UI-richtlijnen en skelet + CI staan op `main`:**
+CMake + JUCE 9 + CLAP, een eerste instrument-shell (`lp_disc1`, nog zonder echte UI)
+en tests; CI bouwt Windows VST3 + CLAP. Namen zijn codenamen ("LP", "LP Disc 1 (dev)").
 Zie `HANDOFF.md` voor de actuele stand en de open beslissingen.
 
 ## Inhoud
@@ -19,8 +19,11 @@ Zie `HANDOFF.md` voor de actuele stand en de open beslissingen.
 |---|---|
 | `HANDOFF.md` | Actuele stand, beslissingen, volgende stappen. Begin hier. |
 | `CLAUDE.md` | Werkregels voor AI-agents in deze repo |
+| `docs/design/GUIDELINES.md` | **UI-richtlijnen (System Browser)**, gaan voor op `01-ui-aesthetic.md` |
+| `docs/design/moodboard.html` | Moodboard met 24 referenties (ook: https://claude.ai/artifact/FVmLbZqHbTq3nEriabxqxm) |
 | `docs/vision/fase1-synthese.html` | Synthese van fase 1 (ook als pagina: https://claude.ai/artifact/NDx661jybpyVaKktLxdtmw) |
-| `docs/research/01-ui-aesthetic.md` | UI-esthetiek: referenties, beeldtaal, drie art directions |
+| `docs/research/01-ui-aesthetic.md` | UI-esthetiek uit tekstonderzoek (verouderd voor de UI) |
+| `docs/research/05-…`, `06-…` | Beeldonderzoek: console-UI's, muzieksoftware, concurrenten |
 | `docs/research/02-sound-palette.md` | Geluid: genre, breaks, sounds per instrument, signature-effecten |
 | `docs/research/03-innovation-landscape.md` | Innovatie en markt: concurrentie, ideeën, kerninnovatie |
 | `docs/research/04-tech-stack.md` | Techniek: FL Studio, JUCE, 3D-UI, CI, fasering |
