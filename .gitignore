@@ -1,7 +1,10 @@
 # Build output
 build/
+build-*/
+.cache/
 Builds/
 cmake-build-*/
+.cache/
 out/
 dist/
 

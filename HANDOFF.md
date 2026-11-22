@@ -6,7 +6,23 @@ Laatst bijgewerkt: 22 november 2026. Deze sectie is de actuele waarheid; houd he
 
 - **Fase 1 (onderzoek) afgerond.** Vier onderzoeksrapporten in `docs/research/`,
   synthese in `docs/vision/fase1-synthese.html`.
-- **Nog geen code**, geen build, geen CI.
+- **Fase 0 (skelet + CI) gebouwd** op branch `claude/skeleton-ci` (nog niet in `main`).
+  JUCE 9.0.6 + clap-juce-extensions (main-commit, de laatste tag is van 2022) + Catch2 3.9.1,
+  alle drie op commit gecontroleerd. Codenamen: familie "LP", plugin `lp_disc1` /
+  "LP Disc 1 (dev)"; alle namen en ids staan alleen in `cmake/Names.cmake`.
+  - `plugins/disc1`: mono polyBLEP-saw → TPT-SVF lowpass → amp-env, last-note priority,
+    legato glide (intern, want FL geeft slide-noten niet door). 6 parameters (APVTS),
+    state save/restore. Editor = placeholder ("UI pending art direction" + build-hash);
+    **er is bewust nog geen UI ontworpen.**
+  - **Geverifieerd (Linux, deze container):** build VST3 + CLAP + Standalone; 15 Catch2-tests
+    groen (render, random blokgroottes 1..2048 gelijk aan vaste blokken (tolerantie 1e-6), geen
+    allocaties in `processBlock`, state round-trip, geen NaN bij extreme parameters,
+    sample-rate-wissel); pluginval 1.0.4 strictness 10 SUCCESS; clap-validator 0.4.1:
+    33 passed, 0 failed, 1 warning (random state-bytes geaccepteerd: JUCE kan laden niet laten falen).
+  - **Niet geverifieerd:** Windows/MSVC-build en `scripts/get-latest.ps1` (pas als de
+    CI-run draait; het script is niet uitgevoerd), en laden/klank/DPI in FL Studio.
+- Volgende stap: CI-run op Windows controleren, gebruiker test `LP Disc 1 (dev)` in FL
+  (laden, noten, glide, automation, state, DPI), daarna branch naar `main`.
 - Het project is gestart vanuit een sessie op de G02-repo; dat is een ander,
   ongerelateerd project. Niets van dit project hoort daar.
 
