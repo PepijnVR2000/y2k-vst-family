@@ -1,0 +1,20 @@
+# Build output
+build/
+Builds/
+cmake-build-*/
+out/
+dist/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Blender autosaves
+*.blend1
+*.blend2
