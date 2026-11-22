@@ -34,7 +34,7 @@ Details: `docs/research/03-innovation-landscape.md`.
 |---|---|---|
 | Onderzoek (UI-tekst, geluid, innovatie, techniek) | klaar | `docs/research/01`–`04` |
 | Beeldonderzoek (48 beelden bekeken, 24 gekozen) | klaar | `docs/research/05`, `06`, `docs/design/references/` |
-| UI-richtlijnen "System Browser" | vastgelegd, **wacht op akkoord gebruiker** | `docs/design/GUIDELINES.md`, `docs/design/moodboard.html` |
+| UI-richtlijnen "System Browser" | **akkoord gebruiker** (22 nov: "moodboard goed") | `docs/design/GUIDELINES.md`, `docs/design/moodboard.html` |
 | Skelet + CI | klaar, CI groen op Linux én Windows | zie hieronder |
 | Disc 1 DSP | alleen testsynth | `plugins/disc1` |
 | Disc 1 UI | nog niets; placeholder-editor, in dev-builds schuifjes per parameter | `libs/lp_core/source/DevParamEditor.cpp` |
@@ -119,11 +119,19 @@ heropenen van het project.
 ## Volgende stappen
 
 1. ~~FL-test van de testsynth~~ **klaar** (22 nov): alles geslaagd, zie tabel.
-2. **Akkoord op de art direction** vragen (moodboard). Nog niet expliciet gegeven; de
-   gebruiker geeft zijn oordeel als eerstvolgende stap.
+2. ~~Akkoord op de art direction~~ **gegeven** (22 nov).
 3. **Eerste echte render van het disc 1-paneel** in de Browser-ruimte: kubus-sequencer,
-   prisma-ring-knoppen, VFD-strook, Vib-Ribbon-lijn als scope. Eerst als beeld (Blender of
-   een realtime render) ter beoordeling, pas daarna in JUCE.
+   prisma-ring-knoppen, VFD-strook, Vib-Ribbon-lijn als scope. Eerst als beeld ter
+   beoordeling, pas daarna in JUCE. **v1 staat klaar, wacht op oordeel gebruiker** (22 nov):
+   https://claude.ai/artifact/4c6SqN3iA2y5VPmKZXLtzm, bron `docs/design/disc1-panel/`.
+   Werkwijze: `tools/render/disc1_panel.py` bouwt de 3D-scène in **Blender 4.0** (Cycles,
+   OptiX op de laptop-GPU, ± 20 s) en schrijft de render plus de schermposities
+   (`layout.json`, ook in `index.html` gezet); tekst, waarden en VFD liggen als aparte
+   laag erover, zoals JUCE ze later tekent. Opnieuw renderen:
+   `& "C:\Program Files\Blender Foundation\Blender 4.0\blender.exe" -b --factory-startup -P tools\render\disc1_panel.py -- docs\design\disc1-panel 128 100`
+   Open voorstellen in v1: welke 4 parameters een ring krijgen (gekozen: Cutoff,
+   Resonance, Env mod, Accent), 960 × 600, ringen vullen vanaf boven met de klok mee,
+   slide/accent per stap nog niet getekend.
 4. Daarna DSP van disc 1: Reese, hoover, 303-acid met accent-opbouw, SH-101-arp en
    sequencer met slide/accent/per-stap-parameters (zie `docs/research/02-sound-palette.md`).
 

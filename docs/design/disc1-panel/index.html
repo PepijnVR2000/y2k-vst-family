@@ -1,0 +1,223 @@
+<meta charset="utf-8">
+<title>Disc 1 Panel v1</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=VT323&display=swap">
+<style>
+/* Layout: one 960x600 panel (3D render + live text layer, as JUCE will draw it), review notes below.
+   Single look on purpose: the page sits in the Browser room's edge colour. */
+:root {
+  color-scheme: dark;
+  --room-edge: #272922;
+  --text: #eef0ea;        /* standard */
+  --title: #e4f17c;       /* titles, context */
+  --active: #72c7d7;      /* active */
+  --vfd: #f2fdfb;
+  --vfd-bg: #1a2c3a;
+  --vfd-off: #2e445b;
+  --amber: #cbab36;
+  --muted: #b9bdb3;
+  --f-ui: "M PLUS Rounded 1c", "Arial Rounded MT Bold", "Segoe UI", system-ui, sans-serif;
+  --f-vfd: "VT323", "Consolas", ui-monospace, monospace;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .5);
+}
+body {
+  background: var(--room-edge);
+  color: var(--text);
+  font-family: var(--f-ui);
+  font-weight: 500;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 24px 48px;
+}
+.wrap { max-width: 960px; margin: 0 auto; display: grid; gap: 28px; }
+
+/* The panel. 1 logical px = 100cqw / 960, so text scales with the render. */
+.panel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 960 / 600;
+  max-width: 100%;
+  container-type: inline-size;
+  overflow: hidden;
+  border-radius: 6px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, .45);
+  background: #5e625a;
+}
+.panel img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.panel .t {
+  position: absolute;
+  --px: calc(100cqw / 960);
+  font-size: calc(18 * var(--px));
+  line-height: 1.1;
+  color: var(--text);
+  text-shadow: var(--shadow);
+  white-space: nowrap;
+  transform: translate(-50%, 0);
+  pointer-events: none;
+}
+.panel .t.left { transform: none; }
+.panel .t.mid { transform: translate(-50%, -50%); }
+.title { font-size: calc(28 * var(--px)) !important; color: var(--title) !important; font-weight: 700; }
+.sub { font-size: calc(18 * var(--px)) !important; font-weight: 500; }
+.label.active { color: var(--active); font-size: calc(20 * var(--px)) !important; }
+.value { text-align: center; }
+.value b { display: block; font-size: calc(26 * var(--px)); font-weight: 700; }
+.value span { display: block; font-size: calc(14 * var(--px)); color: var(--text); }
+.num { font-size: calc(20 * var(--px)) !important; font-weight: 700;
+       text-shadow: 0 0 calc(2 * var(--px)) rgba(0,0,0,.75), 0 1px 1px rgba(0,0,0,.6); }
+.num.rest { opacity: .55; }
+.small { font-size: calc(14 * var(--px)) !important; color: var(--text); opacity: .8; }
+
+/* VFD strip: the only rectangle in the Browser room. */
+.vfd, .amber {
+  position: absolute;
+  --px: calc(100cqw / 960);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: calc(10 * var(--px));
+  font-family: var(--f-vfd);
+  font-size: calc(26 * var(--px));
+  line-height: 1;
+  border-radius: calc(3 * var(--px));
+  padding: 0 calc(12 * var(--px));
+  box-shadow: inset 0 0 0 1px #0d1820, 0 calc(2 * var(--px)) calc(6 * var(--px)) rgba(0,0,0,.35);
+}
+.vfd {
+  color: var(--vfd);
+  background:
+    radial-gradient(circle at 50% 50%, var(--vfd-off) 0 28%, transparent 32%) 0 0 / calc(4 * var(--px)) calc(4 * var(--px)),
+    var(--vfd-bg);
+  text-shadow: 0 0 calc(6 * var(--px)) rgba(160, 255, 250, .55);
+}
+.amber {
+  justify-content: center;
+  color: var(--amber);
+  background:
+    radial-gradient(circle at 50% 50%, #2a2410 0 28%, transparent 32%) 0 0 / calc(4 * var(--px)) calc(4 * var(--px)),
+    #0b0b08;
+  text-shadow: 0 0 calc(5 * var(--px)) rgba(240, 200, 80, .45);
+}
+.scope { position: absolute; left: 0; width: 100%; height: auto; overflow: visible; }
+
+/* Review notes */
+.notes { display: grid; gap: 18px; font-weight: 400; font-size: 16px; line-height: 1.6; color: var(--text); }
+.notes h1 { font-size: 26px; font-weight: 700; color: var(--title); margin: 0; text-wrap: balance; }
+.notes h2 { font-size: 18px; font-weight: 700; margin: 0; color: var(--title); }
+.notes p { margin: 0; max-width: 65ch; color: var(--muted); }
+.notes ul { margin: 0; padding-left: 1.2em; max-width: 70ch; }
+.notes li { margin: 4px 0; }
+.notes li b { color: var(--text); font-weight: 700; }
+.notes .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 18px 32px; }
+.notes .cols > div { min-width: 0; display: grid; gap: 8px; align-content: start; }
+code { font-family: var(--f-vfd); font-size: 1.15em; color: var(--active); }
+</style>
+
+<div class="wrap">
+  <div class="panel" id="panel" aria-label="Disc 1 panel, render v1">
+    <img src="disc1-panel.png" alt="3D render of the disc 1 panel: four glass prism rings, three small knobs, two toggles, sixteen step cubes and an orange candy ball in a warm grey room">
+  </div>
+
+  <section class="notes">
+    <h1>Disc 1, eerste paneel</h1>
+    <p>Eén vaste toestand ter beoordeling, nog niet bedienbaar. De 3D-objecten komen uit Blender; tekst, waarden en de VFD liggen er als aparte laag overheen, zoals JUCE ze later tekent. Zo komt er nooit bloom over tekst.</p>
+    <p><b style="color:var(--text)">v2:</b> korrelige waas over de beeldlaag (zachte gloed, dunne mist in de kleur van de ruimte, korrel). De tekstlaag blijft scherp.</p>
+    <div class="cols">
+      <div>
+        <h2>Wat je ziet</h2>
+        <ul>
+          <li><b>Prisma-ringen</b>: Cutoff, Resonance, Env mod, Accent. De waarde vult de prisma's met de klok mee vanaf boven. Cutoff is geselecteerd: lichtpoel eronder, iets groter, label cyaan, waarde in het midden.</li>
+          <li><b>Kleine knoppen</b>: Decay, Glide, Level.</li>
+          <li><b>Toggles</b>: Arp (aan, gloeit van binnen), Hold (uit).</li>
+          <li><b>Scope</b>: de witte lijn, Vib-Ribbon-stijl, toont de golfvorm.</li>
+          <li><b>Sequencer</b>: 16 kubussen in disc 1-verloop. Stap 5 speelt (gloeit wit, lichtpoel); 4, 8, 11 en 15 zijn rusten (gedimd).</li>
+          <li><b>Snoepbal</b>: Random, de enige speelse actie.</li>
+          <li><b>VFD</b> met de precieze waarde, <b>amber</b> host-tempo.</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Voorstellen, nog niet vast</h2>
+        <ul>
+          <li>Welke vier parameters een ring krijgen. Ik koos de 303-kern; de huidige testsynth heeft nog geen Env mod en Accent.</li>
+          <li>Vensterformaat <code>960 × 600</code>.</li>
+          <li>Ringen vullen vanaf boven met de klok mee, zoals de klok-referentie, in plaats van een klassieke knop van 7 naar 5 uur.</li>
+          <li>Slide en accent per stap zijn nog niet getekend.</li>
+          <li>Labels in het Engels, de taal van de meeste plugins.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const LAYOUT = /*LAYOUT*/{"W": 960, "H": 600, "cubes": [{"n": 1, "face": [105.9, 425.5], "centre": [110.0, 415.0], "state": "on"}, {"n": 2, "face": [193.9, 425.5], "centre": [198.0, 415.0], "state": "on"}, {"n": 3, "face": [281.9, 425.5], "centre": [286.0, 415.0], "state": "on"}, {"n": 4, "face": [369.9, 425.5], "centre": [374.0, 415.0], "state": "rest"}, {"n": 5, "face": [457.7, 426.1], "centre": [462.0, 415.0], "state": "play"}, {"n": 6, "face": [545.9, 425.5], "centre": [550.0, 415.0], "state": "on"}, {"n": 7, "face": [633.9, 425.5], "centre": [638.0, 415.0], "state": "on"}, {"n": 8, "face": [721.9, 425.5], "centre": [726.0, 415.0], "state": "rest"}, {"n": 9, "face": [105.9, 520.5], "centre": [110.0, 510.0], "state": "on"}, {"n": 10, "face": [193.9, 520.5], "centre": [198.0, 510.0], "state": "on"}, {"n": 11, "face": [281.9, 520.5], "centre": [286.0, 510.0], "state": "rest"}, {"n": 12, "face": [369.9, 520.5], "centre": [374.0, 510.0], "state": "on"}, {"n": 13, "face": [457.9, 520.5], "centre": [462.0, 510.0], "state": "on"}, {"n": 14, "face": [545.9, 520.5], "centre": [550.0, 510.0], "state": "on"}, {"n": 15, "face": [633.9, 520.5], "centre": [638.0, 510.0], "state": "rest"}, {"n": 16, "face": [721.9, 520.5], "centre": [726.0, 510.0], "state": "on"}], "rings": [{"label": "Cutoff", "centre": [130.0, 180.0], "label_at": [130.0, 266.7], "active": true, "value": "1.42", "unit": "kHz", "lit": 7}, {"label": "Resonance", "centre": [300.0, 180.0], "label_at": [300.0, 261.8], "active": false, "value": "34", "unit": "%", "lit": 4}, {"label": "Env mod", "centre": [470.0, 180.0], "label_at": [470.0, 261.8], "active": false, "value": "66", "unit": "%", "lit": 8}, {"label": "Accent", "centre": [640.0, 180.0], "label_at": [640.0, 261.8], "active": false, "value": "50", "unit": "%", "lit": 6}], "knobs": [{"label": "Decay", "centre": [745.0, 172.0], "label_at": [745.0, 205.4], "value": "320 ms"}, {"label": "Glide", "centre": [822.0, 172.0], "label_at": [822.0, 205.4], "value": "60 ms"}, {"label": "Level", "centre": [899.0, 172.0], "label_at": [899.0, 205.4], "value": "-12 dB"}], "toggles": [{"label": "Arp", "centre": [772.0, 262.0], "label_at": [772.0, 296.0], "on": true}, {"label": "Hold", "centre": [872.0, 262.0], "label_at": [872.0, 296.0], "on": false}], "candy": {"label": "Random", "centre": [862.0, 455.0], "label_at": [862.0, 497.0]}, "stripes": {"left": 39, "top": 21, "right": 69, "bottom": 53}}/*END*/;
+
+(function build() {
+  const panel = document.getElementById("panel");
+  if (!LAYOUT) return;
+  const W = LAYOUT.W, H = LAYOUT.H;
+  const pct = (v, total) => (v / total * 100) + "%";
+
+  function text(content, x, y, cls, html) {
+    const el = document.createElement("div");
+    el.className = "t " + (cls || "");
+    el.style.left = pct(x, W);
+    el.style.top = pct(y, H);
+    if (html) el.innerHTML = content; else el.textContent = content;
+    panel.appendChild(el);
+    return el;
+  }
+
+  function box(cls, x, y, w, h, html) {
+    const el = document.createElement("div");
+    el.className = cls;
+    el.style.left = pct(x, W);
+    el.style.top = pct(y, H);
+    el.style.width = pct(w, W);
+    el.style.height = pct(h, H);
+    el.innerHTML = html;
+    panel.appendChild(el);
+  }
+
+  // Header: mark (rendered) + title, VFD strip, amber tempo.
+  const s = LAYOUT.stripes;
+  text("Disc 1", s.right + 12, 17, "left title");
+  text("Mono arp", s.right + 104, 27, "left sub");
+  box("vfd", 588, 20, 250, 38, "<span>Cutoff</span><span>1.42 kHz</span>");
+  box("amber", 850, 20, 80, 38, "<span>174.0</span>");
+
+  // Prism rings.
+  for (const r of LAYOUT.rings) {
+    text(r.label, r.label_at[0], r.label_at[1], "label" + (r.active ? " active" : ""));
+    if (r.active) text("<b>" + r.value + "</b><span>" + r.unit + "</span>", r.centre[0], r.centre[1], "mid value", true);
+  }
+  for (const k of LAYOUT.knobs) text(k.label, k.label_at[0], k.label_at[1], "label");
+  for (const t of LAYOUT.toggles) text(t.label, t.label_at[0], t.label_at[1], "label");
+  text(LAYOUT.candy.label, LAYOUT.candy.label_at[0], LAYOUT.candy.label_at[1], "label");
+
+  // Step numbers on the cube faces.
+  for (const c of LAYOUT.cubes) text(String(c.n), c.face[0], c.face[1], "mid num" + (c.state === "rest" ? " rest" : ""));
+
+  // Scope: Vib-Ribbon style line. Flat, with three periods of the current
+  // waveform (a saw) as straight segments in the middle.
+  const y0 = 338, x0 = 40, x1 = 920, start = 345, period = 90, amp = 14;
+  const pts = [[x0, y0], [start, y0]];
+  for (let p = 0; p < 3; p++) {
+    const a = start + p * period;
+    pts.push([a, y0 + amp], [a + period, y0 - amp]);   // ramp up
+  }
+  pts.push([start + 3 * period, y0 + amp], [start + 3 * period, y0], [x1, y0]);
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+  svg.setAttribute("class", "scope");
+  svg.style.top = "0";
+  svg.innerHTML =
+    '<polyline points="' + pts.map(p => p.join(",")).join(" ") +
+    '" fill="none" stroke="rgba(0,0,0,.35)" stroke-width="2" stroke-linejoin="round" transform="translate(0,1.5)"/>' +
+    '<polyline points="' + pts.map(p => p.join(",")).join(" ") +
+    '" fill="none" stroke="#eef0ea" stroke-width="2" stroke-linejoin="round"/>';
+  panel.appendChild(svg);
+
+  text("Pattern 1 · 16 steps · 1/16", 40, 566, "left small");
+})();
+</script>

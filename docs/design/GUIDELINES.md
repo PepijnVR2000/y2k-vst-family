@@ -1,6 +1,7 @@
 # UI-richtlijnen: System Browser
 
-Versie 1, 22 november 2026. Gebaseerd op 48 bekeken beelden (`docs/research/05-…` en `06-…`),
+Versie 1, 22 november 2026. **Akkoord van de gebruiker op 22 november 2026.**
+Gebaseerd op 48 bekeken beelden (`docs/research/05-…` en `06-…`),
 gecureerd tot 24 in `docs/design/references/` en `docs/design/moodboard.html`.
 **Vervangt** de visuele woordenschat, paletten en de drie richtingen in
 `docs/research/01-ui-aesthetic.md` en in `docs/vision/fase1-synthese.html`. Die waren
