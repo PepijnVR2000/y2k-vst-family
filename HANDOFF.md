@@ -37,7 +37,7 @@ Details: `docs/research/03-innovation-landscape.md`.
 | Skelet + CI | klaar, CI groen op Linux én Windows | zie hieronder |
 | Disc 1 DSP | alleen testsynth | `plugins/disc1` |
 | Disc 1 UI | nog niets; placeholder-editor | — |
-| Getest in FL Studio | **nog niet** | — |
+| Getest in FL Studio | **laadt** (build 498a358c, 22 nov, door de gebruiker); geluid, glide, state en DPI nog niet getest | — |
 
 Let op: `docs/research/01-ui-aesthetic.md` en `docs/vision/fase1-synthese.html` zijn
 op tekst gebaseerd en voor de UI **verouderd**. `GUIDELINES.md` gaat voor.
@@ -96,7 +96,9 @@ Sluit FL Studio. Kopieer `LP Disc 1 dev.vst3` (map) naar
 
 ## Volgende stappen
 
-1. **FL-test van de testsynth** (gebruiker, lokaal): laadt hij als VST3 én CLAP, klinken
+1. **FL-test van de testsynth** (gebruiker, lokaal). Laden werkt (de eerste keer per ongeluk
+   als effect op de Master-insert; als instrument hoort hij in de Channel Rack). Nog doen:
+   laadt hij als VST3 én CLAP, klinken
    noten, werkt glide bij overlappende noten, komen instellingen terug na opslaan/heropenen,
    klopt de schaal op een hoge-DPI-scherm. Problemen hier eerst oplossen.
 2. **Akkoord op de art direction** vragen (moodboard). Nog niet expliciet gegeven.
