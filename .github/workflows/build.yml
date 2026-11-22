@@ -1,0 +1,207 @@
+name: build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  BUILD_TYPE: Release
+  PLUGINVAL_VERSION: v1.0.4
+  CLAP_VALIDATOR_VERSION: "0.4.1"
+
+jobs:
+  linux:
+    name: Linux (build + tests + validators)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Short SHA
+        run: echo "SHORT_SHA=${GITHUB_SHA::8}" >> "$GITHUB_ENV"
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            ninja-build xvfb \
+            libasound2-dev libfreetype-dev libfontconfig1-dev \
+            libx11-dev libxcomposite-dev libxcursor-dev libxext-dev \
+            libxinerama-dev libxrandr-dev libxrender-dev libxi-dev
+
+      # FetchContent sources + populate stamps (configure passes
+      # LP_DEPS_DIR=.cache/deps), keyed on the pinned versions.
+      - name: Cache FetchContent dependencies
+        uses: actions/cache@v6
+        with:
+          path: .cache/deps
+          key: deps-${{ runner.os }}-${{ hashFiles('cmake/Dependencies.cmake') }}
+
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2.26
+        with:
+          key: linux-${{ env.BUILD_TYPE }}
+          max-size: 1G
+
+      - name: Configure
+        run: >
+          cmake -S . -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+          -DLP_DEPS_DIR=.cache/deps
+          -DCMAKE_C_COMPILER_LAUNCHER=ccache
+          -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Unit tests
+        run: ctest --test-dir build --output-on-failure
+
+      - name: pluginval (VST3, strictness 10)
+        run: |
+          curl -fsSL -o pluginval.zip \
+            "https://github.com/Tracktion/pluginval/releases/download/${PLUGINVAL_VERSION}/pluginval_Linux.zip"
+          unzip -q pluginval.zip -d pluginval-bin
+          for p in build/plugins/*/*_artefacts/${BUILD_TYPE}/VST3/*.vst3; do
+            echo "::group::pluginval $p"
+            xvfb-run -a ./pluginval-bin/pluginval --strictness-level 10 \
+              --validate-in-process --validate "$p"
+            echo "::endgroup::"
+          done
+
+      - name: Cache clap-validator
+        id: cache-clap-validator
+        uses: actions/cache@v6
+        with:
+          path: ~/.clap-validator
+          key: clap-validator-${{ runner.os }}-${{ env.CLAP_VALIDATOR_VERSION }}
+
+      - name: Build clap-validator
+        if: steps.cache-clap-validator.outputs.cache-hit != 'true'
+        run: >
+          cargo install --locked --root "$HOME/.clap-validator"
+          --git https://github.com/free-audio/clap-validator --tag "$CLAP_VALIDATOR_VERSION"
+          clap-validator
+
+      - name: clap-validator (CLAP)
+        run: |
+          for p in build/plugins/*/*_artefacts/${BUILD_TYPE}/CLAP/*.clap; do
+            echo "::group::clap-validator $p"
+            "$HOME/.clap-validator/bin/clap-validator" validate "$p"
+            echo "::endgroup::"
+          done
+
+      - name: Stage artifacts
+        run: |
+          mkdir -p dist/VST3 dist/CLAP
+          cp -R build/plugins/*/*_artefacts/${BUILD_TYPE}/VST3/*.vst3 dist/VST3/
+          cp build/plugins/*/*_artefacts/${BUILD_TYPE}/CLAP/*.clap dist/CLAP/
+          printf 'commit %s\nref %s\nrun %s\n' "$GITHUB_SHA" "$GITHUB_REF_NAME" "$GITHUB_RUN_ID" > dist/BUILD_INFO.txt
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: lp-linux-x64-${{ env.SHORT_SHA }}
+          path: dist
+          retention-days: 14
+
+  windows:
+    name: Windows x64 (MSVC, VST3 + CLAP)
+    runs-on: windows-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Short SHA
+        run: echo "SHORT_SHA=${GITHUB_SHA::8}" >> "$GITHUB_ENV"
+
+      # FetchContent sources + populate stamps (configure passes
+      # LP_DEPS_DIR=.cache/deps), keyed on the pinned versions.
+      - name: Cache FetchContent dependencies
+        uses: actions/cache@v6
+        with:
+          path: .cache/deps
+          key: deps-${{ runner.os }}-${{ hashFiles('cmake/Dependencies.cmake') }}
+
+      - name: Configure (default Visual Studio generator, x64)
+        run: >
+          cmake -S . -B build -A x64
+          -DLP_DEPS_DIR=.cache/deps
+
+      - name: Build
+        run: cmake --build build --config ${{ env.BUILD_TYPE }} --parallel
+
+      - name: Unit tests
+        run: ctest --test-dir build -C ${{ env.BUILD_TYPE }} --output-on-failure
+
+      - name: pluginval (VST3, strictness 10)
+        run: |
+          curl -fsSL -o pluginval.zip \
+            "https://github.com/Tracktion/pluginval/releases/download/${PLUGINVAL_VERSION}/pluginval_Windows.zip"
+          7z x -y -opluginval-bin pluginval.zip > /dev/null
+          for p in build/plugins/*/*_artefacts/${BUILD_TYPE}/VST3/*.vst3; do
+            echo "::group::pluginval $p"
+            ./pluginval-bin/pluginval.exe --strictness-level 10 --validate-in-process --validate "$p"
+            echo "::endgroup::"
+          done
+
+      - name: Cache clap-validator
+        id: cache-clap-validator
+        uses: actions/cache@v6
+        with:
+          path: ~/.clap-validator
+          key: clap-validator-${{ runner.os }}-${{ env.CLAP_VALIDATOR_VERSION }}
+
+      - name: Build clap-validator
+        if: steps.cache-clap-validator.outputs.cache-hit != 'true'
+        run: >
+          cargo install --locked --root "$HOME/.clap-validator"
+          --git https://github.com/free-audio/clap-validator --tag "$CLAP_VALIDATOR_VERSION"
+          clap-validator
+
+      - name: clap-validator (CLAP)
+        run: |
+          for p in build/plugins/*/*_artefacts/${BUILD_TYPE}/CLAP/*.clap; do
+            echo "::group::clap-validator $p"
+            "$HOME/.clap-validator/bin/clap-validator.exe" validate "$p"
+            echo "::endgroup::"
+          done
+
+      - name: Stage artifacts
+        run: |
+          mkdir -p dist/VST3 dist/CLAP
+          cp -R build/plugins/*/*_artefacts/${BUILD_TYPE}/VST3/*.vst3 dist/VST3/
+          cp build/plugins/*/*_artefacts/${BUILD_TYPE}/CLAP/*.clap dist/CLAP/
+          printf 'commit %s\nref %s\nrun %s\n' "$GITHUB_SHA" "$GITHUB_REF_NAME" "$GITHUB_RUN_ID" > dist/BUILD_INFO.txt
+
+      # scripts/get-latest.ps1 downloads this artifact (name prefix lp-windows-x64-).
+      - uses: actions/upload-artifact@v7
+        with:
+          name: lp-windows-x64-${{ env.SHORT_SHA }}
+          path: dist
+          retention-days: 30
+
+  # macOS (AU + VST3 + CLAP, universal binary, notarisation) comes later.
+  # Sketch, intentionally disabled:
+  #
+  # macos:
+  #   runs-on: macos-15
+  #   steps:
+  #     - uses: actions/checkout@v7
+  #     - run: >
+  #         cmake -S . -B build -G Xcode
+  #         -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+  #         -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
+  #     - run: cmake --build build --config Release --parallel
+  #     - run: ctest --test-dir build -C Release --output-on-failure
+  #   (add AU to FORMATS in cmake/LpPlugin.cmake, then sign + notarise)
