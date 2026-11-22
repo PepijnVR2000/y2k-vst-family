@@ -15,6 +15,9 @@ if(MSVC)
 endif()
 
 option(LP_BUILD_TESTS "Build the test suite" ON)
+# Plain slider per parameter instead of the placeholder, for testing in a host
+# before the real UI exists. Turn OFF before any public build.
+option(LP_DEV_EDITOR "Show development sliders instead of the placeholder editor" ON)
 option(LP_COPY_PLUGIN_AFTER_BUILD "Copy plugins to the user plugin folders after build" OFF)
 
 include(cmake/Dependencies.cmake)

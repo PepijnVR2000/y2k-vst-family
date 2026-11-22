@@ -1,5 +1,6 @@
 #include "PluginProcessor.h"
 
+#include <lp_core/DevParamEditor.h>
 #include <lp_core/PlaceholderEditor.h>
 
 namespace disc1
@@ -107,7 +108,11 @@ void Disc1Processor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiB
 
 juce::AudioProcessorEditor* Disc1Processor::createEditor()
 {
+#if LP_DEV_EDITOR
+    return new lp::DevParamEditor (*this, LP_PLUGIN_NAME);
+#else
     return new lp::PlaceholderEditor (*this, LP_PLUGIN_NAME);
+#endif
 }
 
 void Disc1Processor::getStateInformation (juce::MemoryBlock& destData)

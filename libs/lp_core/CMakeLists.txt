@@ -27,7 +27,8 @@ add_custom_target(lp_build_info
 add_library(lp_core INTERFACE)
 add_dependencies(lp_core lp_build_info)
 target_sources(lp_core INTERFACE
-    ${CMAKE_CURRENT_SOURCE_DIR}/source/PlaceholderEditor.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/PlaceholderEditor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/DevParamEditor.cpp)
 target_include_directories(lp_core INTERFACE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${LP_GENERATED_DIR})
@@ -41,4 +42,5 @@ target_compile_definitions(lp_core INTERFACE
     JUCE_USE_CURL=0
     JUCE_VST3_CAN_REPLACE_VST2=0
     JUCE_DISPLAY_SPLASH_SCREEN=0
-    JUCE_MODAL_LOOPS_PERMITTED=0)
+    JUCE_MODAL_LOOPS_PERMITTED=0
+    LP_DEV_EDITOR=$<BOOL:${LP_DEV_EDITOR}>)

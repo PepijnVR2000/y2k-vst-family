@@ -1,7 +1,7 @@
 # Handoff
 
-Laatst bijgewerkt: 22 november 2026, bij de overstap van een cloudsessie naar een lokale
-sessie op Windows. Dit bestand is de actuele waarheid; houd het kort en werk het bij in
+Laatst bijgewerkt: 22 november 2026 (avond), na de FL-test en het opzetten van lokaal
+bouwen op Windows. Dit bestand is de actuele waarheid; houd het kort en werk het bij in
 dezelfde commit als je werk.
 
 ## Begin hier (nieuwe sessie)
@@ -9,8 +9,9 @@ dezelfde commit als je werk.
 1. Lees dit bestand, dan `CLAUDE.md` (werkregels), dan `docs/design/GUIDELINES.md` (UI).
 2. Dit project staat **los van G02**. Niets uit `C:\Users\pepij\Claude Code` (G02/G01) hoort
    hier, en niets van hier hoort daar.
-3. Het eerstvolgende wat de gebruiker wil: **de build in FL Studio testen** en daarna het
-   **eerste echte UI-paneel van disc 1** (zie "Volgende stappen").
+3. Het eerstvolgende wat de gebruiker wil: zijn **oordeel over het moodboard** geven en daarna
+   het **eerste echte UI-paneel van disc 1** (zie "Volgende stappen"). FL-test en lokaal
+   bouwen zijn klaar.
 
 ## Wat het project is
 
@@ -36,8 +37,9 @@ Details: `docs/research/03-innovation-landscape.md`.
 | UI-richtlijnen "System Browser" | vastgelegd, **wacht op akkoord gebruiker** | `docs/design/GUIDELINES.md`, `docs/design/moodboard.html` |
 | Skelet + CI | klaar, CI groen op Linux én Windows | zie hieronder |
 | Disc 1 DSP | alleen testsynth | `plugins/disc1` |
-| Disc 1 UI | nog niets; placeholder-editor | — |
-| Getest in FL Studio | **laadt** (build 498a358c, 22 nov, door de gebruiker); geluid, glide, state en DPI nog niet getest | — |
+| Disc 1 UI | nog niets; placeholder-editor, in dev-builds schuifjes per parameter | `libs/lp_core/source/DevParamEditor.cpp` |
+| Getest in FL Studio 20.7 | **geslaagd** (22 nov, gebruiker), VST3: laadt als instrument, noten klinken, glide werkt (ook met langere glide-tijd), venster scherp op 125% DPI, cutoff en glide komen terug na opslaan + FL herstarten (lokale dev-build). CLAP niet testbaar (zie Techniek) | — |
+| Lokaal bouwen | opgezet op de pc van de gebruiker (22 nov) | zie "Lokaal bouwen op Windows" |
 
 Let op: `docs/research/01-ui-aesthetic.md` en `docs/vision/fase1-synthese.html` zijn
 op tekst gebaseerd en voor de UI **verouderd**. `GUIDELINES.md` gaat voor.
@@ -73,35 +75,52 @@ Moodboard online: https://claude.ai/artifact/FVmLbZqHbTq3nEriabxqxm
 - CI: `.github/workflows/build.yml`. Run 45041401596 op commit 498a358: Linux én Windows
   (MSVC, VST3 + CLAP) groen; artifact `lp-windows-x64-498a358c`.
 - `scripts/get-latest.ps1`: haalt de nieuwste geslaagde Windows-build op (via `gh`) en
-  installeert hem. **Nog nooit echt gedraaid.**
+  installeert hem. Werkt (22 nov gedraaid). Op `main` was toen nog geen CI-run, dus
+  `-Branch claude/skeleton-ci` was nodig.
+- **De gebruiker heeft alleen FL Studio 20.7.1 en kan niet upgraden.** Die versie laadt
+  geen CLAP. Gevolg: VST3 is het formaat dat de gebruiker hoort en test; CLAP blijft
+  meegebouwd en wordt in CI met clap-validator gecontroleerd. **Ontwerpregel: geen functie
+  mag alleen via CLAP werken** (bv. per-noot-modulatie). Vóór een publieke release één keer
+  laten testen in een nieuwere FL.
+- `LP_DEV_EDITOR` (CMake-optie, standaard AAN): plugins tonen een kaal venster met één
+  schuifje per parameter in plaats van de placeholder, om in FL te kunnen testen. Geen
+  ontwerp. **Zet UIT vóór elke publieke build**, en verwijder zodra het echte paneel er is.
 
 ### Lokaal bouwen op Windows
 
+Op de pc van de gebruiker staat Visual Studio 2022 Community met de werklast
+"Desktop development with C++" (MSVC 14.44, Windows SDK 10.0.26100, CMake 3.31).
+CMake staat niet in PATH; het script zoekt de CMake van Visual Studio zelf.
+
+**Eén commando: bouwen, testen, installeren** (FL Studio dicht):
+
 ```powershell
-cmake -S . -B build -A x64
-cmake --build build --config Release --parallel
-ctest --test-dir build -C Release --output-on-failure
+powershell -ExecutionPolicy Bypass -File scripts\build-local.ps1
 ```
 
-Vereist CMake ≥ 3.28, Visual Studio 2022 (C++), Git. Uitvoer:
-`build/plugins/disc1/lp_disc1_artefacts/Release/{VST3,CLAP,Standalone}`.
+Build-map `%LOCALAPPDATA%\lpb`, afhankelijkheden `%LOCALAPPDATA%\lpdeps`. **Niet in de
+repo bouwen**: MSBuild faalt op paden boven 260 tekens (gebeurd op 22 nov met de repo in
+een diepe map). Eerste keer ± 5–10 min (JUCE ophalen), daarna alleen wat veranderd is.
+`-NoInstall` bouwt en test zonder te installeren. Uitvoer:
+`%LOCALAPPDATA%\lpb\plugins\disc1\lp_disc1_artefacts\Release\{VST3,CLAP,Standalone}`.
 
 ### Installeren voor FL Studio
 
-Sluit FL Studio. Kopieer `LP Disc 1 dev.vst3` (map) naar
-`C:\Program Files\Common Files\VST3` en `LP Disc 1 dev.clap` naar
-`C:\Program Files\Common Files\CLAP` (beheerdersrechten nodig). Of:
-`powershell -ExecutionPolicy Bypass -File scripts\get-latest.ps1`. Dan in FL:
-*Options → Manage plugins → Find installed plugins*.
+Sluit FL Studio (het houdt geladen plugins vast). Dan, met beheerdersrechten-prompt:
+
+- lokale build (zonder opnieuw te bouwen): `powershell -ExecutionPolicy Bypass -File scripts\install-local.ps1`
+- nieuwste CI-build: `powershell -ExecutionPolicy Bypass -File scripts\get-latest.ps1`
+
+Beide schrijven naar `C:\Program Files\Common Files\VST3` en `\CLAP`, dus de ene vervangt
+de andere (zelfde plugin-ids, geen dubbelen in FL). Nieuwe plugin: in FL
+*Options → Manage plugins → Find more plugins*. Een bestaande update laadt FL bij het
+heropenen van het project.
 
 ## Volgende stappen
 
-1. **FL-test van de testsynth** (gebruiker, lokaal). Laden werkt (de eerste keer per ongeluk
-   als effect op de Master-insert; als instrument hoort hij in de Channel Rack). Nog doen:
-   laadt hij als VST3 én CLAP, klinken
-   noten, werkt glide bij overlappende noten, komen instellingen terug na opslaan/heropenen,
-   klopt de schaal op een hoge-DPI-scherm. Problemen hier eerst oplossen.
-2. **Akkoord op de art direction** vragen (moodboard). Nog niet expliciet gegeven.
+1. ~~FL-test van de testsynth~~ **klaar** (22 nov): alles geslaagd, zie tabel.
+2. **Akkoord op de art direction** vragen (moodboard). Nog niet expliciet gegeven; de
+   gebruiker geeft zijn oordeel als eerstvolgende stap.
 3. **Eerste echte render van het disc 1-paneel** in de Browser-ruimte: kubus-sequencer,
    prisma-ring-knoppen, VFD-strook, Vib-Ribbon-lijn als scope. Eerst als beeld (Blender of
    een realtime render) ter beoordeling, pas daarna in JUCE.
@@ -114,7 +133,8 @@ Sluit FL Studio. Kopieer `LP Disc 1 dev.vst3` (map) naar
   GPL-emulatorcode kopiëren.
 - Windows code signing: Azure Artifact Signing is alleen voor individuen in VS/Canada.
 - FL-eigenaardigheden: multi-out vraagt "Auto map outputs"; "Make bridged" breekt
-  links tussen instanties; DPI-schaling.
+  links tussen instanties; DPI-schaling boven 125% en met twee schermen met verschillende
+  schaal nog niet gezien.
 
 ## Geschiedenis
 
